@@ -20,7 +20,7 @@ export default function PageHeader({
 
   return (
     <>
-      <div className="flex items-center justify-between px-4 py-3 bg-[#1a3fc7]">
+      <div className="flex items-center justify-between px-4 py-3 bg-[#2852a6]">
         <div className="w-10">
           {showBack ? (
             <button onClick={() => navigate(-1)} className="text-white p-1">
@@ -38,7 +38,7 @@ export default function PageHeader({
         <h2 className="text-white text-center flex-1">{title}</h2>
         <div className="w-10 flex justify-end">
           {showHome && (
-            <button onClick={() => navigate("/")} className="text-white p-1">
+            <button onClick={() => navigate("/home")} className="text-white p-1">
               <Home size={22} />
             </button>
           )}
@@ -48,29 +48,36 @@ export default function PageHeader({
       {/* Side menu overlay */}
       {menuOpen && (
         <div
-          className="fixed inset-0 z-50 flex"
+          className="absolute inset-0 z-50 flex"
           onClick={() => setMenuOpen(false)}
         >
           <div
-            className="w-72 bg-white h-full shadow-xl p-6 overflow-y-auto"
+            className="w-72 bg-white h-full shadow-xl overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="mb-6">
-              <div className="w-16 h-16 bg-[#1a3fc7] rounded-full flex items-center justify-center mb-3">
-                <span className="text-white text-2xl">🏦</span>
+            {/* Menu Header */}
+            <div className="bg-[#2852a6] px-5 pt-8 pb-6">
+              <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center mb-3">
+                <span className="text-white" style={{ fontSize: "24px" }}>S</span>
               </div>
-              <p className="text-gray-800">Welcome, User</p>
-              <p className="text-gray-500 text-sm">A/C: XXXX1234</p>
+              <p className="text-white" style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 600, fontSize: "15px" }}>
+                SHIVPRAKASH S
+              </p>
+              <p className="text-white/70" style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 500, fontSize: "12px" }}>
+                A/C: 0004 10 101 014512
+              </p>
             </div>
-            <div className="space-y-1">
+            {/* Menu Items */}
+            <div className="py-2 px-2">
               {[
                 { label: "Dashboard", path: "/dashboard" },
                 { label: "Fund Transfer", path: "/fund-transfer" },
+                { label: "Account Info", path: "/account-info" },
                 { label: "Account Statement", path: "/statement" },
                 { label: "Cheque Book", path: "/cheque-book" },
-                { label: "Locate Branch", path: "/" },
-                { label: "Contact Us", path: "/" },
-                { label: "Logout", path: "/" },
+                { label: "Locate Branch", path: "/home" },
+                { label: "Contact Us", path: "/home" },
+                { label: "Logout", path: "/home" },
               ].map((item) => (
                 <button
                   key={item.label}
@@ -78,7 +85,8 @@ export default function PageHeader({
                     setMenuOpen(false);
                     navigate(item.path);
                   }}
-                  className="block w-full text-left px-3 py-3 rounded-lg text-gray-700 hover:bg-blue-50 transition-colors"
+                  className="block w-full text-left px-4 py-3.5 rounded-lg text-[#2852a6] hover:bg-[#f0f4ff] active:bg-[#e0e8ff] transition-colors"
+                  style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 500, fontSize: "13px" }}
                 >
                   {item.label}
                 </button>

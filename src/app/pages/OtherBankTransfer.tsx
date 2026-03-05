@@ -1,49 +1,57 @@
 import { useNavigate } from "react-router";
+import { ChevronRight } from "lucide-react";
 import PageHeader from "../components/PageHeader";
-import { Truck, ChevronRight } from "lucide-react";
+
+const options = [
+  { label: "IMPS", path: "/imps-transfer" },
+  { label: "IMPS Check Status", path: "/other-bank-transfer" },
+  { label: "IMPS Name Inquiry", path: "/other-bank-transfer" },
+];
 
 export default function OtherBankTransfer() {
   const navigate = useNavigate();
 
-  const options = [
-    { label: "IMPS", path: "/imps-transfer" },
-    { label: "IMPS Check Status", path: "/dashboard" },
-    { label: "IMPS Name Inquiry", path: "/dashboard" },
-  ];
-
   return (
-    <div className="min-h-full bg-[#1a3fc7] flex flex-col">
-      <PageHeader title="Other Bank Transfer" showBack />
+    <div className="min-h-screen bg-[#2852a6] flex flex-col">
+      <PageHeader title="Other Bank Transfer" showBack={false} showMenu={true} showHome={true} />
 
-      <div className="mx-4 mt-2 bg-white/95 rounded-2xl p-5 flex-1">
+      {/* White rounded card */}
+      <div className="mx-3 mt-2 bg-white rounded-[15px] shadow-[4px_6px_30px_4px_rgba(110,105,105,0.25)] p-5 flex flex-col">
         <div className="space-y-3">
           {options.map((option) => (
             <button
               key={option.label}
               onClick={() => navigate(option.path)}
-              className="w-full flex items-center gap-4 p-4 bg-gray-200 rounded-full hover:bg-blue-50 active:scale-[0.98] transition-all"
+              className="w-full flex items-center justify-between px-5 py-4 bg-[#eee] rounded-[14px] active:scale-[0.98] transition-all"
             >
-              <Truck size={20} color="#1a3fc7" />
-              <span className="flex-1 text-left text-gray-700">
+              <span
+                className="text-[#2852a6]"
+                style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 500, fontSize: "12px" }}
+              >
                 {option.label}
               </span>
-              <ChevronRight size={20} className="text-gray-400" />
+              <ChevronRight size={18} className="text-[#737283]" />
             </button>
           ))}
         </div>
 
         {/* Back Button */}
-        <div className="flex justify-center mt-8">
+        <div className="flex justify-center mt-8 mb-2">
           <button
             onClick={() => navigate(-1)}
-            className="px-12 py-3 bg-[#f57c20] text-white rounded-full hover:bg-[#e06a10] active:scale-95 transition-all shadow-md"
+            className="px-12 py-2.5 bg-[#ff5d1d] border-[0.5px] border-[#a6a1a1] text-white rounded-full active:scale-95 transition-all"
+            style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 500, fontSize: "13px" }}
           >
             Back
           </button>
         </div>
       </div>
 
-      <div className="h-6" />
+      {/* White area below */}
+      <div className="flex-1 bg-white mt-3" />
+
+      {/* Blue bottom bar */}
+      <div className="h-[50px] bg-[#2852a6]" />
     </div>
   );
 }

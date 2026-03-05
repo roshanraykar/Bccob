@@ -1,11 +1,16 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import PageHeader from "../components/PageHeader";
+import { motion, AnimatePresence } from "motion/react";
 import { CheckCircle } from "lucide-react";
+import PageHeader from "../components/PageHeader";
+import AccountInfoCard from "../components/AccountInfoCard";
+
+const font = { fontFamily: "'Montserrat', sans-serif" };
 
 export default function IMPSTransfer() {
   const navigate = useNavigate();
   const [step, setStep] = useState<"form" | "confirm" | "success">("form");
+  const [focusedField, setFocusedField] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     beneficiaryName: "",
     accountNumber: "",
@@ -19,159 +24,178 @@ export default function IMPSTransfer() {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
+  const inputClass = (field: string) =>
+    `w-full px-4 py-3 rounded-full text-[#2852a6] focus:outline-none transition-all ${
+      focusedField === field
+        ? "bg-[#fffdfd] border-[1.5px] border-[#65b9ee] shadow-[-1px_-1px_4px_3px_rgba(131,180,212,0.5)]"
+        : "bg-[#eee]"
+    }`;
+
   const handleSubmit = () => {
-    if (step === "form") {
-      setStep("confirm");
-    } else if (step === "confirm") {
-      setStep("success");
-    }
+    if (step === "form") setStep("confirm");
+    else if (step === "confirm") setStep("success");
   };
 
+  /* ── Success Screen ── */
   if (step === "success") {
     return (
-      <div className="min-h-full bg-[#1a3fc7] flex flex-col">
-        <PageHeader title="IMPS Transfer" showHome />
-        <div className="mx-4 mt-2 bg-white rounded-2xl p-6 flex-1 flex flex-col items-center justify-center">
-          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-4">
-            <CheckCircle size={48} className="text-green-500" />
+      <div className="min-h-screen bg-white flex flex-col">
+        <div className="bg-[#2852a6]">
+          <PageHeader title="IMPS Transfer" showBack={false} showMenu={true} showHome={true} />
+        </div>
+        <div className="flex-1 flex flex-col items-center justify-center px-6">
+          <div className="w-[80px] h-[80px] bg-[#cbf1e0] rounded-full flex items-center justify-center mb-5">
+            <CheckCircle size={44} className="text-[#4f9b79]" />
           </div>
-          <h2 className="text-gray-800 mb-1">Transfer Successful!</h2>
-          <p className="text-gray-500 text-sm text-center mb-2">
-            ₹ {Number(formData.amount).toLocaleString("en-IN")} transferred to{" "}
-            {formData.beneficiaryName}
+          <p className="text-[#2852a6] mb-2" style={{ ...font, fontWeight: 600, fontSize: "18px" }}>
+            Transfer Successful!
           </p>
-          <p className="text-gray-400 text-xs mb-6">
+          <p className="text-[#858484] text-center mb-1" style={{ ...font, fontWeight: 500, fontSize: "13px" }}>
+            <span style={{ fontFamily: "Arial, sans-serif" }}>₹</span>{" "}
+            {Number(formData.amount || 0).toLocaleString("en-IN")} transferred to{" "}
+            {formData.beneficiaryName || "Beneficiary"}
+          </p>
+          <p className="text-[#858484] mb-8" style={{ ...font, fontWeight: 500, fontSize: "11px" }}>
             Ref No: IMPS{Date.now().toString().slice(-10)}
           </p>
           <button
             onClick={() => navigate("/dashboard")}
-            className="px-10 py-3 bg-[#1a3fc7] text-white rounded-full active:scale-95 transition-all"
+            className="px-10 py-2.5 bg-[#ff5d1d] border-[0.5px] border-[#a6a1a1] text-white rounded-full active:scale-95 transition-all"
+            style={{ ...font, fontWeight: 500, fontSize: "13px" }}
           >
             Go to Dashboard
           </button>
         </div>
-        <div className="h-6" />
       </div>
     );
   }
 
+  /* ── Confirm Screen ── */
   if (step === "confirm") {
     return (
-      <div className="min-h-full bg-[#1a3fc7] flex flex-col">
-        <PageHeader title="Confirm Transfer" showBack />
-        <div className="mx-4 mt-2 bg-white rounded-2xl p-6 flex-1">
-          <h3 className="text-gray-800 mb-4">Please confirm the details</h3>
-          <div className="space-y-3">
+      <div className="min-h-screen bg-white flex flex-col">
+        <div className="bg-[#2852a6]">
+          <PageHeader title="Confirm Transfer" showBack={false} showMenu={true} showHome={true} />
+        </div>
+        <div className="flex-1 bg-white px-4 pt-6">
+          <p className="text-[#2852a6] mb-5" style={{ ...font, fontWeight: 600, fontSize: "15px" }}>
+            Please confirm the details
+          </p>
+
+          <div className="border-[3px] border-[#2852a6] rounded-[22px] p-5 mb-6">
             {[
               { label: "Beneficiary", value: formData.beneficiaryName },
               { label: "Account No.", value: formData.accountNumber },
               { label: "IFSC Code", value: formData.ifscCode },
-              {
-                label: "Amount",
-                value: `₹ ${Number(formData.amount).toLocaleString("en-IN")}`,
-              },
+              { label: "Amount", value: `₹ ${Number(formData.amount || 0).toLocaleString("en-IN")}` },
               { label: "Remarks", value: formData.remarks || "N/A" },
             ].map((item) => (
               <div
                 key={item.label}
-                className="flex justify-between py-3 border-b border-gray-100"
+                className="flex justify-between py-3 border-b border-[#eee] last:border-b-0"
               >
-                <span className="text-gray-500 text-sm">{item.label}</span>
-                <span className="text-gray-800 text-sm">{item.value}</span>
+                <span className="text-[#858484]" style={{ ...font, fontWeight: 500, fontSize: "12px" }}>
+                  {item.label}
+                </span>
+                <span className="text-[#2852a6]" style={{ ...font, fontWeight: 500, fontSize: "12px" }}>
+                  {item.value}
+                </span>
               </div>
             ))}
           </div>
 
-          <div className="flex gap-3 mt-8">
+          <div className="flex gap-4 px-1">
             <button
               onClick={() => setStep("form")}
-              className="flex-1 py-3 border-2 border-gray-300 text-gray-600 rounded-full active:scale-95 transition-all"
+              className="flex-1 py-2.5 bg-[#ff5d1d] border-[0.5px] border-[#a6a1a1] text-white rounded-full active:scale-95 transition-all"
+              style={{ ...font, fontWeight: 500, fontSize: "13px" }}
             >
               Edit
             </button>
             <button
               onClick={handleSubmit}
-              className="flex-1 py-3 bg-[#f57c20] text-white rounded-full active:scale-95 transition-all shadow-md"
+              className="flex-1 py-2.5 bg-[#ef7b64] border-[0.5px] border-[#a6a1a1] text-white rounded-full active:scale-95 transition-all"
+              style={{ ...font, fontWeight: 500, fontSize: "13px" }}
             >
               Confirm
             </button>
           </div>
         </div>
-        <div className="h-6" />
+        <div className="h-[50px] bg-[#2852a6] mt-auto" />
       </div>
     );
   }
 
-  return (
-    <div className="min-h-full bg-[#1a3fc7] flex flex-col">
-      <PageHeader title="IMPS Transfer" showBack />
+  /* ── Form Screen ── */
+  const fields = [
+    { key: "beneficiaryName", label: "Beneficiary Name" },
+    { key: "accountNumber", label: "Account Number" },
+    { key: "confirmAccount", label: "Confirm Account Number" },
+    { key: "ifscCode", label: "IFSC Code" },
+    { key: "amount", label: "Amount (₹)" },
+    { key: "remarks", label: "Remarks" },
+  ];
 
-      <div className="mx-4 mt-2 bg-white rounded-2xl p-6 flex-1">
-        <div className="space-y-4">
-          {[
-            {
-              key: "beneficiaryName",
-              label: "Beneficiary Name",
-              type: "text",
-              placeholder: "Enter beneficiary name",
-            },
-            {
-              key: "accountNumber",
-              label: "Account Number",
-              type: "text",
-              placeholder: "Enter account number",
-            },
-            {
-              key: "confirmAccount",
-              label: "Confirm Account Number",
-              type: "text",
-              placeholder: "Re-enter account number",
-            },
-            {
-              key: "ifscCode",
-              label: "IFSC Code",
-              type: "text",
-              placeholder: "Enter IFSC code",
-            },
-            {
-              key: "amount",
-              label: "Amount (₹)",
-              type: "number",
-              placeholder: "Enter amount",
-            },
-            {
-              key: "remarks",
-              label: "Remarks",
-              type: "text",
-              placeholder: "Optional",
-            },
-          ].map((field) => (
-            <div key={field.key}>
-              <label className="text-gray-600 text-sm mb-1 block">
-                {field.label}
-              </label>
-              <input
-                type={field.type}
-                placeholder={field.placeholder}
-                value={formData[field.key as keyof typeof formData]}
-                onChange={(e) => handleChange(field.key, e.target.value)}
-                className="w-full px-4 py-3 bg-gray-100 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              />
-            </div>
-          ))}
+  return (
+    <div className="min-h-screen bg-white flex flex-col">
+      <div className="bg-[#2852a6]">
+        <PageHeader title="IMPS Transfer" showBack={false} showMenu={true} showHome={true} />
+      </div>
+
+      <div className="flex-1 bg-white px-4 pt-5 overflow-y-auto">
+        {/* From Account dropdown */}
+        <p className="text-[#2852a6] mb-2" style={{ ...font, fontWeight: 500, fontSize: "13px" }}>
+          From Account
+        </p>
+        <div className="w-full px-4 py-3 bg-[#eee] rounded-full flex items-center justify-between mb-3">
+          <span className="text-[#2852a6]" style={{ ...font, fontWeight: 500, fontSize: "13px", letterSpacing: "1px" }}>
+            000410101014512
+          </span>
+          <svg width="12" height="8" viewBox="0 0 28 16" fill="none">
+            <path d="M2 2L14 14L26 2" stroke="#959596" strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" />
+          </svg>
         </div>
 
-        <div className="flex justify-center mt-6">
+        <div className="mb-5">
+          <AccountInfoCard compact />
+        </div>
+
+        {/* Form Fields */}
+        {fields.map((field) => (
+          <div key={field.key} className="mb-4">
+            <p className="text-[#2852a6] mb-2" style={{ ...font, fontWeight: 500, fontSize: "13px" }}>
+              {field.label}
+            </p>
+            <input
+              type={field.key === "amount" ? "number" : "text"}
+              value={formData[field.key as keyof typeof formData]}
+              onChange={(e) => handleChange(field.key, e.target.value)}
+              onFocus={() => setFocusedField(field.key)}
+              onBlur={() => setFocusedField(null)}
+              className={inputClass(field.key)}
+              style={{ ...font, fontSize: "13px" }}
+            />
+          </div>
+        ))}
+
+        {/* Buttons */}
+        <div className="flex gap-4 px-1 mb-8">
+          <button
+            onClick={() => navigate(-1)}
+            className="flex-1 py-2.5 bg-[#ff5d1d] border-[0.5px] border-[#a6a1a1] text-white rounded-full active:scale-95 transition-all"
+            style={{ ...font, fontWeight: 500, fontSize: "13px" }}
+          >
+            Back
+          </button>
           <button
             onClick={handleSubmit}
-            className="px-12 py-3 bg-[#f57c20] text-white rounded-full hover:bg-[#e06a10] active:scale-95 transition-all shadow-md"
+            className="flex-1 py-2.5 bg-[#ef7b64] border-[0.5px] border-[#a6a1a1] text-white rounded-full active:scale-95 transition-all"
+            style={{ ...font, fontWeight: 500, fontSize: "13px" }}
           >
             Proceed
           </button>
         </div>
       </div>
-
-      <div className="h-6" />
     </div>
   );
 }
