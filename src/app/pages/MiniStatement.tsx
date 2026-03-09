@@ -4,14 +4,14 @@ import { motion } from "motion/react";
 import PageHeader from "../components/PageHeader";
 
 const transactionData = [
-  { id: 1, date: "Jan 30, 2026", time: "9:22 AM", narration: "DR", ref: "IMPS/000000459", amount: "1.00", type: "Cr" },
-  { id: 2, date: "Jan 30, 2026", time: "9:22 AM", narration: "DR", ref: "IMPS/000000459", amount: "1.00", type: "Cr" },
-  { id: 3, date: "Jan 30, 2026", time: "9:22 AM", narration: "DR", ref: "IMPS/000000459", amount: "1.00", type: "Cr" },
-  { id: 4, date: "Jan 29, 2026", time: "6:11 PM", narration: "DR", ref: "IMPS/000000459", amount: "1.85", type: "Cr" },
-  { id: 5, date: "Jan 30, 2026", time: "9:22 AM", narration: "DR", ref: "IMPS/000000459", amount: "1.00", type: "Cr" },
-  { id: 6, date: "Jan 30, 2026", time: "9:22 AM", narration: "DR", ref: "IMPS/000000459", amount: "1.00", type: "Cr" },
-  { id: 7, date: "Jan 30, 2026", time: "9:22 AM", narration: "DR", ref: "IMPS/000000459", amount: "1.00", type: "Cr" },
-  { id: 8, date: "Jan 30, 2026", time: "9:22 AM", narration: "DR", ref: "IMPS/000000459", amount: "1.00", type: "Cr" },
+  { id: 1, date: "Jan 30, 2026", time: "9:22 AM", narration: "BY", ref: "UPI/345042928169/", amount: "1.00", type: "Cr" },
+  { id: 2, date: "Jan 30, 2026", time: "9:22 AM", narration: "TO", ref: "UPI/639619889317/", amount: "1.00", type: "Dr" },
+  { id: 3, date: "Jan 30, 2026", time: "9:22 AM", narration: "BY", ref: "UPI/345042928169/", amount: "1.00", type: "Cr" },
+  { id: 4, date: "Jan 30, 2026", time: "9:22 AM", narration: "BY", ref: "UPI/345042928169/", amount: "1.00", type: "Cr" },
+  { id: 5, date: "Jan 30, 2026", time: "9:22 AM", narration: "TO", ref: "UPI/639619889317/", amount: "1.00", type: "Dr" },
+  { id: 6, date: "Jan 30, 2026", time: "9:22 AM", narration: "BY", ref: "UPI/345042928169/", amount: "1.00", type: "Cr" },
+  { id: 7, date: "Jan 30, 2026", time: "9:22 AM", narration: "BY", ref: "UPI/345042928169/", amount: "1.00", type: "Cr" },
+  { id: 8, date: "Jan 30, 2026", time: "9:22 AM", narration: "TO", ref: "UPI/639619889317/", amount: "1.00", type: "Dr" },
 ];
 
 export default function MiniStatement() {
@@ -30,7 +30,7 @@ export default function MiniStatement() {
       <div className="flex-1 px-3 pt-3 pb-4 overflow-y-auto relative">
         {/* Loading overlay */}
         {loading && (
-          <div className="absolute inset-0 z-10 bg-[rgba(40,50,80,0.7)] flex items-center justify-center rounded-t-xl">
+          <div className="absolute inset-0 z-10 bg-[rgba(40,82,166,0.8)] flex items-center justify-center rounded-t-xl">
             <motion.div
               animate={{ rotate: 360 }}
               transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
@@ -48,68 +48,64 @@ export default function MiniStatement() {
           {transactionData.map((txn) => (
             <div
               key={txn.id}
-              className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-[16px] p-3.5"
+              className="bg-white border-[1.5px] border-[#5b5858] rounded-[20px] p-4"
             >
               {/* Date and Time row */}
-              <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center justify-between mb-3 pb-3 border-b border-[#797979]">
                 <div className="flex items-center gap-2">
-                  <Calendar size={14} className="text-white/70" />
+                  <Calendar size={18} className="text-[#2852a6]" />
                   <span
-                    className="text-white/90"
-                    style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 500, fontSize: "12px" }}
+                    className="text-[#2852a6]"
+                    style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 500, fontSize: "14px" }}
                   >
                     {txn.date}
                   </span>
                 </div>
                 <span
-                  className="text-white/70"
-                  style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 500, fontSize: "11px" }}
+                  className="text-[#2852a6]"
+                  style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 500, fontSize: "14px" }}
                 >
                   {txn.time}
                 </span>
               </div>
 
               {/* Narration */}
-              <div className="flex items-center gap-2 mb-1.5">
+              <div className="flex items-start gap-2 mb-3">
                 <span
-                  className="text-white/60"
-                  style={{ fontFamily: "'Montserrat', sans-serif", fontSize: "11px" }}
+                  className="text-[#2852a6]"
+                  style={{ fontFamily: "'Montserrat', sans-serif", fontSize: "14px" }}
                 >
                   Narration
                 </span>
-                <span
-                  className="text-white/50"
-                  style={{ fontFamily: "'Montserrat', sans-serif", fontSize: "11px" }}
-                >
-                  {txn.narration}
-                </span>
-                <span
-                  className="text-white/40 ml-2"
-                  style={{ fontFamily: "'Montserrat', sans-serif", fontSize: "10px" }}
-                >
-                  {txn.ref}
-                </span>
+                <div className="flex flex-col">
+                  <span
+                    className="text-[#999]"
+                    style={{ fontFamily: "'Montserrat', sans-serif", fontSize: "13px", lineHeight: "20px" }}
+                  >
+                    : {txn.narration}
+                  </span>
+                  <span
+                    className="text-[#999]"
+                    style={{ fontFamily: "'Montserrat', sans-serif", fontSize: "13px", lineHeight: "20px" }}
+                  >
+                    {txn.ref}
+                  </span>
+                </div>
               </div>
 
               {/* Amount */}
               <div className="flex items-center gap-2">
                 <span
-                  className="text-white/60"
-                  style={{ fontFamily: "'Montserrat', sans-serif", fontSize: "11px" }}
+                  className="text-[#2852a6]"
+                  style={{ fontFamily: "'Montserrat', sans-serif", fontSize: "14px" }}
                 >
                   Amount
                 </span>
                 <span
-                  className="text-white/70"
-                  style={{ fontFamily: "'Montserrat', sans-serif", fontSize: "11px" }}
+                  className={txn.type === "Cr" ? "text-[#10c45b]" : "text-[#f03534]"}
+                  style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 500, fontSize: "13px" }}
                 >
-                  {txn.type}
-                </span>
-                <span
-                  className="text-[#ef7b64]"
-                  style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 500, fontSize: "12px" }}
-                >
-                  ₹{txn.amount}
+                  : {txn.type}.  <span style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 700 }}>₹</span>{txn.amount}
                 </span>
               </div>
             </div>

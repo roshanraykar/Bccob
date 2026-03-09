@@ -14,7 +14,8 @@ export default function Login() {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-      navigate("/dashboard", { state: { fromLogin: true } });
+      sessionStorage.setItem("justLoggedIn", "true");
+      navigate("/dashboard");
     }, 2000);
   };
 

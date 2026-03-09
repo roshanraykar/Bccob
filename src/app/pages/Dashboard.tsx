@@ -1,4 +1,4 @@
-import { useNavigate, useLocation } from "react-router";
+import { useNavigate } from "react-router";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import svgPaths from "../../imports/svg-m44mwr5tyv";
@@ -90,15 +90,17 @@ const dashboardActions = [
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const [showSuccess, setShowSuccess] = useState(
-    () => !!(location.state as any)?.fromLogin
-  );
+  const [showSuccess, setShowSuccess] = useState(() => {
+    const justLoggedIn = sessionStorage.getItem("justLoggedIn");
+    if (justLoggedIn) {
+      sessionStorage.removeItem("justLoggedIn");
+      return true;
+    }
+    return false;
+  });
 
   useEffect(() => {
     if (showSuccess) {
-      // Clear the navigation state so it won't show again on revisit
-      window.history.replaceState({}, "");
       const timer = setTimeout(() => setShowSuccess(false), 4000);
       return () => clearTimeout(timer);
     }

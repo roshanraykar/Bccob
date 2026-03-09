@@ -116,14 +116,14 @@ export default function FundTransferForm() {
         {/* Beneficiary Name Pill - shown when a beneficiary is selected */}
         {toAccount && (
           <div className="mb-5 mt-2">
-            <div className="bg-[#374060] border border-[#faf0f0] rounded-full px-5 py-3 flex items-center justify-between">
+            <div className="bg-[#374060] border border-[#faf0f0] rounded-full px-6 py-4 flex items-center justify-between">
               <span
                 className="text-white"
-                style={{ ...font, fontWeight: 600, fontSize: "14px" }}
+                style={{ ...font, fontWeight: 600, fontSize: "16px" }}
               >
                 {toAccount}
               </span>
-              <div className="w-[22px] h-[22px] rounded-full border-[3px] border-white" />
+              <div className="w-[24px] h-[24px] rounded-full border-[3px] border-white" />
             </div>
           </div>
         )}
