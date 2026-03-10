@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { useNavigate } from "react-router";
 import PageHeader from "../components/PageHeader";
 import AccountInfoCard from "../components/AccountInfoCard";
+import CustomKeyboard from "../components/CustomKeyboard";
 
 const beneficiaries = [
   "CHETHAN KUMAR C",
@@ -17,6 +18,19 @@ export default function FundTransferForm() {
   const [creditParticulars, setCreditParticulars] = useState("");
   const [focusedField, setFocusedField] = useState<string | null>(null);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [activeInput, setActiveInput] = useState<"amount" | "debit" | "credit" | null>(null);
+
+  const handleKeyPress = (key: string) => {
+    if (key === "⌫") {
+      if (activeInput === "amount") setAmount((prev) => prev.slice(0, -1));
+      else if (activeInput === "debit") setDebitParticulars((prev) => prev.slice(0, -1));
+      else if (activeInput === "credit") setCreditParticulars((prev) => prev.slice(0, -1));
+    } else {
+      if (activeInput === "amount") setAmount((prev) => prev + key);
+      else if (activeInput === "debit") setDebitParticulars((prev) => prev + key);
+      else if (activeInput === "credit") setCreditParticulars((prev) => prev + key);
+    }
+  };
 
   const font = { fontFamily: "'Montserrat', sans-serif" };
 
@@ -139,8 +153,14 @@ export default function FundTransferForm() {
           type="text"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
-          onFocus={() => setFocusedField("amount")}
-          onBlur={() => setFocusedField(null)}
+          onFocus={() => {
+            setFocusedField("amount");
+            setActiveInput("amount");
+          }}
+          onBlur={() => {
+            setFocusedField(null);
+            setActiveInput(null);
+          }}
           className={inputClass("amount") + " mb-5"}
           style={{ ...font, fontSize: "13px" }}
         />
@@ -156,8 +176,14 @@ export default function FundTransferForm() {
           type="text"
           value={debitParticulars}
           onChange={(e) => setDebitParticulars(e.target.value)}
-          onFocus={() => setFocusedField("debit")}
-          onBlur={() => setFocusedField(null)}
+          onFocus={() => {
+            setFocusedField("debit");
+            setActiveInput("debit");
+          }}
+          onBlur={() => {
+            setFocusedField(null);
+            setActiveInput(null);
+          }}
           className={inputClass("debit") + " mb-5"}
           style={{ ...font, fontSize: "13px" }}
         />
@@ -173,8 +199,14 @@ export default function FundTransferForm() {
           type="text"
           value={creditParticulars}
           onChange={(e) => setCreditParticulars(e.target.value)}
-          onFocus={() => setFocusedField("credit")}
-          onBlur={() => setFocusedField(null)}
+          onFocus={() => {
+            setFocusedField("credit");
+            setActiveInput("credit");
+          }}
+          onBlur={() => {
+            setFocusedField(null);
+            setActiveInput(null);
+          }}
           className={inputClass("credit") + " mb-8"}
           style={{ ...font, fontSize: "13px" }}
         />
@@ -195,6 +227,13 @@ export default function FundTransferForm() {
             Next
           </button>
         </div>
+
+        {/* Custom Keyboard */}
+        <CustomKeyboard
+          isVisible={activeInput !== null}
+          onKeyPress={handleKeyPress}
+          onClose={() => setActiveInput(null)}
+        />
       </div>
     </div>
   );

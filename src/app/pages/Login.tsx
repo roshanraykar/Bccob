@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { motion, AnimatePresence } from "motion/react";
 import svgPaths from "../../imports/svg-2ihoc69uig";
+import CustomKeyboard from "../components/CustomKeyboard";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -9,6 +10,21 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [mpin, setMpin] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [activeInput, setActiveInput] = useState<"username" | "password" | "mpin" | null>(null);
+
+  const handleKeyPress = (key: string) => {
+    if (key === "⌫") {
+      if (activeInput === "username") setUsername((prev) => prev.slice(0, -1));
+      else if (activeInput === "password") setPassword((prev) => prev.slice(0, -1));
+      else if (activeInput === "mpin") setMpin((prev) => prev.slice(0, -1));
+    } else {
+      if (activeInput === "username") setUsername((prev) => prev + key);
+      else if (activeInput === "password") setPassword((prev) => prev + key);
+      else if (activeInput === "mpin") {
+        if (mpin.length < 6) setMpin((prev) => prev + key);
+      }
+    }
+  };
 
   const handleSubmit = () => {
     setIsLoading(true);
@@ -59,6 +75,8 @@ export default function Login() {
           onChange={(e) => setUsername(e.target.value)}
           className="w-full px-5 py-3 bg-[#eee] rounded-full text-[#333] placeholder-[#666] focus:outline-none focus:ring-2 focus:ring-[#2852a6]/30 mb-3"
           style={{ fontFamily: "'Montserrat', sans-serif", fontSize: "14px" }}
+          onFocus={() => setActiveInput("username")}
+          onBlur={() => setActiveInput(null)}
         />
 
         {/* Password */}
@@ -69,6 +87,8 @@ export default function Login() {
           onChange={(e) => setPassword(e.target.value)}
           className="w-full px-5 py-3 bg-[#eee] rounded-full text-[#333] placeholder-[#666] focus:outline-none focus:ring-2 focus:ring-[#2852a6]/30"
           style={{ fontFamily: "'Montserrat', sans-serif", fontSize: "14px" }}
+          onFocus={() => setActiveInput("password")}
+          onBlur={() => setActiveInput(null)}
         />
 
         {/* OR Divider */}
@@ -92,6 +112,8 @@ export default function Login() {
           onChange={(e) => setMpin(e.target.value)}
           className="w-full px-5 py-3 bg-white rounded-full text-[#333] placeholder-[#666] border border-[#65b9ee] shadow-[-1px_-1px_4px_3px_rgba(131,180,212,0.5)] focus:outline-none"
           style={{ fontFamily: "'Montserrat', sans-serif", fontSize: "14px" }}
+          onFocus={() => setActiveInput("mpin")}
+          onBlur={() => setActiveInput(null)}
         />
 
         {/* Submit Button */}
@@ -156,6 +178,13 @@ export default function Login() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Custom Keyboard */}
+      <CustomKeyboard
+        isVisible={activeInput !== null}
+        onKeyPress={handleKeyPress}
+        onClose={() => setActiveInput(null)}
+      />
     </div>
   );
 }
